@@ -8,14 +8,15 @@ var settings = has.environment.default();
 settings.os       = 'windows'; 
 settings.hostname = '192.168.58.3'; 
 settings.username = 'Vagrant'; 
-settings.password = 'password'; 
-settings.protocol = 'https'; 
-has.environment(settings, 'DEBUG');
-has.user('Vagrant')
-    .then(function (result) {
+settings.password = 'vagrant'; 
+settings.protocol = 'http'; 
+has.environment(settings, 'INFO');
+has.file('c:\\test').then(function (result) {
+        console.log("========================");
         console.log(result);
-        return has.user.who_belongs_to_group('Administrators');
+        return has.file.which_is_a_directory('c:\\vagranty');
     })
     .then(function (result) {
+        console.log("========================");
         console.log(result);
     });

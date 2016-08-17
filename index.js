@@ -3,6 +3,7 @@
 /* eslint vars-on-top: "off" */
 
 var log = require('loglevel');
+var q = require('q');
 
 // local settings - not exported
 var local = {};
@@ -63,6 +64,31 @@ has.feature.enabled = function (name, provider) {
     return local.settings.host.feature.check_is_enabled(name, provider);
 };
 
+// Local file functions to be used internally
+local.file = {};
+
+local.file = function(file) {
+    return local.settings.host.file.check_exists(file);
+};
+
+// We need to validate the file exists before attempting the next command
+local.file.exec = function (file, func) {
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        func(file).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
+};
+
 // File
 has.file = {};
 
@@ -73,62 +99,128 @@ has.file = function (file) {
 
 has.file.which_is_a_file = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_file(file);
+
+    return local.file.exec(file, local.settings.host.file.check_is_file);
 };
 
 has.file.which_is_a_directory = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_directory(file);
+    return local.file.exec(file, local.settings.host.file.check_is_directory);
 };
 
 has.file.which_is_hidden = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_hidden(file);
+    return local.file.exec(file, local.settings.host.file.check_is_hidden);
 };
 
 has.file.which_is_readonly = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_readonly(file);
+    return local.file.exec(file, local.settings.host.file.check_is_readonly);
 };
 
 has.file.which_is_a_system_file = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_system(file);
+    return local.file.exec(file, local.settings.host.file.check_is_system);
 };
 
 has.file.get_content = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.get_content(file);
+    return local.file.exec(file, local.settings.host.file.get_content);
 };
 
 has.file.md5 = function (file) {
     has.file.filename = file;
-    return local.settings.host.file.get_md5sum(file);
+    return local.file.exec(file, local.settings.host.file.get_md5sum);
 };
 
 has.file.which_is_accesible_by_user = function (file, user, access) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_accessible_by_user(file, user, access);
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        local.settings.host.file.check_is_accessible_by_user(file, user, access).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
 };
 
 has.file.which_contains = function (file, pattern) {
     has.file.filename = file;
-    return local.settings.host.filversione.check_contains(file, pattern);
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        local.settings.host.file.check_contains(file, pattern).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
 };
 
-has.file.which_contains_between = function (ile, pattern, from, to) {
+has.file.which_contains_between = function (file, pattern, from, to) {
     has.file.filename = file;
-    return local.settings.host.file.check_contains_within(file, pattern, from, to);
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        local.settings.host.file.check_contains_within(file, pattern, from, to).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
 };
 
 has.file.with_version = function (file, version) {
     has.file.filename = file;
-    return local.settings.host.file.check_has_version(file, version);
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        local.settings.host.file.check_has_version(file, version).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
 };
 
 has.file.owned_by = function (file, owner) {
     has.file.filename = file;
-    return local.settings.host.file.check_is_owned_by(file, owner);
+    var dfd = q.defer();
+
+    // Check if the file exists first
+    local.file(file).then(function (result) {
+        if (result === false) {
+            dfd.resolve(result);
+            return;
+        }
+        // now execute the function passed in
+        local.settings.host.file.check_is_owned_by(file, owner).then(function (result) {
+            dfd.resolve(result);
+        });
+    });
+    return dfd.promise;
 };
 
 // Group Specific Functionality
@@ -405,27 +497,6 @@ has.user.who_belongs_to_group = function (user, group) {
     }
 
     return local.settings.host.user.check_belongs_to_group(user, group);
-};
-
-
-has.file.accesible_by_user = function (file, user, access) {
-    return local.settings.host.file.check_is_accessible_by_user(file, user, access);
-};
-
-has.file.which_contains = function (file, pattern) {
-    return local.settings.host.file.check_contains(file, pattern);
-};
-
-has.file.which_contains_within = function (file, pattern, from, to) {
-    return local.settings.host.file.check_contains_within(file, pattern, from, to);
-};
-
-has.file.with_version = function (file, version) {
-    return local.settings.host.file.check_has_version(file, version);
-};
-
-has.file.owned_by = function (file, owner) {
-    return local.settings.host.file.check_has_version(file, owner);
 };
 
 
