@@ -1,0 +1,32 @@
+{
+  "name": "node-winrm",
+  "version": "1.0.0",
+  "description": "Test framework based on Serverspec",
+  "main": "index.js",
+  "dependencies": {
+    "loglevel": "^1.4.1",
+    "winrmjs": "git+ssh://git@github.com/dev-rowbot/winrmjs.git"
+  },
+  "devDependencies": {
+    "https": "^1.0.0",
+    "winrmjs": "git+ssh://git@github.com/dev-rowbot/winrmjs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thedevopsapprentice/node-winrm.git"
+  },
+  "keywords": [
+    "winrm",
+    "powershell",
+    "serverspec"
+  ],
+  "author": "Eugene Duvenage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thedevopsapprentice/node-winrm/issues"
+  },
+  "homepage": "https://github.com/thedevopsapprentice/node-winrm#readme"
+}
