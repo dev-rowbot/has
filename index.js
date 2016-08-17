@@ -56,23 +56,250 @@ has.environment.default = function () {
         protocol: 'https'
     };
 };
+// Feature Specific Functionality
+has.feature = {};
 
-// User Specific Functionality
-has.user = {};
-
-has.user = function (user) {
-    has.user.username = user;
-    return local.settings.host.user.check_exists(user);
+has.feature.enabled = function (name, provider) {
+    return local.settings.host.feature.check_is_enabled(name, provider);
 };
 
-has.user.who_belongs_to_group = function (user, group) {
-    if (group === undefined && has.user.username !== undefined) {
-        // Use the last username instead
-        group = user;
-        user = has.user.username;
+// File
+has.file = {};
+
+has.file = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_exists(file);
+};
+
+has.file.which_is_a_file = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_file(file);
+};
+
+has.file.which_is_a_directory = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_directory(file);
+};
+
+has.file.which_is_hidden = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_hidden(file);
+};
+
+has.file.which_is_readonly = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_readonly(file);
+};
+
+has.file.which_is_a_system_file = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_system(file);
+};
+
+has.file.get_content = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.get_content(file);
+};
+
+has.file.md5 = function (file) {
+    has.file.filename = file;
+    return local.settings.host.file.get_md5sum(file);
+};
+
+has.file.which_is_accesible_by_user = function (file, user, access) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_accessible_by_user(file, user, access);
+};
+
+has.file.which_contains = function (file, pattern) {
+    has.file.filename = file;
+    return local.settings.host.filversione.check_contains(file, pattern);
+};
+
+has.file.which_contains_between = function (ile, pattern, from, to) {
+    has.file.filename = file;
+    return local.settings.host.file.check_contains_within(file, pattern, from, to);
+};
+
+has.file.with_version = function (file, version) {
+    has.file.filename = file;
+    return local.settings.host.file.check_has_version(file, version);
+};
+
+has.file.owned_by = function (file, owner) {
+    has.file.filename = file;
+    return local.settings.host.file.check_is_owned_by(file, owner);
+};
+
+// Group Specific Functionality
+has.group = {};
+
+has.group = function (group) {
+    return local.settings.host.group.check_exists(group);
+};
+
+// Host Specific Functionality
+has.host = {};
+
+has.host.resolvable = function (name, type) {
+    return local.settings.host.host.check_is_resolvable(name, type);
+};
+
+has.host.reachable = function (host, protocol, timeout, port) {
+    return local.settings.host.host.check_is_reachable(host, protocol, timeout, port);
+};
+
+// Hotfix Specific Functionality
+has.hotfix = {};
+
+has.hotfix.installed = function (description, hot_fix_id) {
+    return local.settings.host.hotfix.check_is_installed(description, hot_fix_id);
+};
+
+// IIS App Pool Specific Functionality
+has.iis_app_pool = {};
+
+has.iis_app_pool.which_exists = function (name) {
+    has.iis_app_pool.name = name;
+    return local.settings.host.iis_app_pool.check_exists(name);
+};
+
+has.iis_app_pool.with_dotnet_version = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
     }
 
-    return local.settings.host.user.check_belongs_to_group(user, group);
+    return local.settings.host.iis_app_pool.check_has_dotnet_version(name, option);
+};
+
+has.iis_app_pool.with_32bit_enabled = function (name) {
+    has.iis_app_pool.name = name;
+    return local.settings.host.iis_app_pool.check_has_32bit_enabled(name);
+};
+
+has.iis_app_pool.with_idle_timeout_of = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
+    }
+
+    return local.settings.host.iis_app_pool.check_has_idle_timeout(name, minutes);
+};
+
+has.iis_app_pool.with_identity_type = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
+    }
+    return local.settings.host.iis_app_pool.check_has_identity_type(name, type);
+};
+
+has.iis_app_pool.with_user_profile = function (name) {
+    has.iis_app_pool.name = name;
+    return local.settings.host.iis_app_pool.check_has_user_profile(name);
+};
+
+has.iis_app_pool.which_has_username = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
+    }
+    return local.settings.host.iis_app_pool.check_has_username(name, username);
+};
+
+has.iis_app_pool.with_periodic_restart_of = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
+    }
+    return local.settings.host.iis_app_pool.check_has_periodic_restart(name, username);
+};
+
+has.iis_app_pool.which_has_managed_pipeline_mode = function (name, option) {
+    if (option === undefined && has.iis_app_pool.name !== undefined) {
+        option = name;
+        name = has.iis_app_pool.name;
+    }
+    else {
+        has.iis_app_pool.name = name;
+    }
+    return local.settings.host.iis_app_pool.check_has_managed_pipeline_mode(name, username);
+};
+
+// IIS Website Specific Functionality
+has.iis_website = {};
+
+has.iis_website.which_is_enabled = function (name) {
+    has.iis_website.name = name;
+    return local.settings.host.iis_website.check_is_enabled(name);
+};
+
+has.iis_website.installed = function (name) {
+    has.iis_website.name = name;
+    return local.settings.host.iis_website.check_is_installed(name);
+};
+
+has.iis_website.running = function (name) {
+    has.iis_website.name = name;
+    return local.settings.host.iis_website.check_is_running(name);
+};
+
+has.iis_website.in_app_pool = function (name, option) {
+    if (option === undefined && has.iis_website.name !== undefined) {
+        option = name;
+        name = has.iis_website.name;
+    }
+    else {
+        has.iis_website.name = name;
+    }
+
+    return local.settings.host.iis_website.check_is_in_app_pool(name, option);
+};
+
+has.iis_website.with_physical_path = function (name, option) {
+    if (option === undefined && has.iis_website.name !== undefined) {
+        option = name;
+        name = has.iis_website.name;
+    }
+    else {
+        has.iis_website.name = name;
+    }
+
+    return local.settings.host.iis_website.check_has_physical_path(name, option);
+};
+
+has.iis_website.with_site_bindings = function (name, port, protocol, ipaddress, host_header) {
+    has.iis_website.name = name;
+
+    return local.settings.host.iis_website.check_has_site_bindings(name, port, protocol, ipaddress, host_header);
+};
+
+has.iis_website.with_virtual_directory = function (name, vdir, path) {
+    has.iis_website.name = name;
+
+    return local.settings.host.iis_website.check_has_virtual_dir(name, vdir, path);
+};
+
+has.iis_website.with_site_application = function (name, app, pool, physical_path) {
+    has.iis_website.name = name;
+
+    return local.settings.host.iis_website.check_has_site_application(name, port, protocol, ipaddress, host_header);
 };
 
 // Port Specific Functionality
@@ -92,43 +319,94 @@ has.port.listening.with_protocol = function (port, protocol) {
     return local.settings.host.port.check_is_listening_with_protocol(port, protocol);
 };
 
+// Process Specific Functionality
+has.process = {};
+
+has.process.properties = function (process, property) {
+    has.process.process = process;
+    return local.settings.host.process.get_process_property(process, property);
+};
+
+has.process.check = function (process) {
+    has.process.process = process;
+    return local.settings.host.process.check_process(process);
+};
+
+has.process.get = function (process, opts) {
+    has.process.process = process;
+    return local.settings.host.process.get(process, opts);
+};
+
+// Reg Key Specific Functionality
+has.registry_key = {};
+
+has.registry_key.properties = function (key_name) {
+    has.registry_key.key_name = key_name;
+    return local.settings.host.registry_key.check_exists(key_name);
+};
+
+// Schedule Task Specific Functionality
+has.scheduled_task = {};
+
+has.scheduled_task = function (name) {
+    has.scheduled_task.name = name;
+    return local.settings.host.scheduled_task.check_exists(name);
+};
+
+// Schedule Task Specific Functionality
+has.service = {};
+
+has.service.installed = function (name) {
+    has.service.name = name;
+    return local.settings.host.service.check_is_installed(name);
+};
+
+has.service.with_start_mode = function (service, mode) {
+    has.service.name = name;
+    return local.settings.host.service.check_has_start_mode(name);
+};
+
+has.service.enabled = function (service, level) {
+    has.service.name = name;
+    return local.settings.host.service.check_is_enabled(name);
+};
+
+has.service.running = function (service) {
+    has.service.name = name;
+    return local.settings.host.service.check_is_running(name);
+};
+
+has.service.with_property = function (service, property) {
+    has.service.name = name;
+    return local.settings.host.service.check_has_property(name, property);
+};
+
 // Feature Specific Functionality
-has.feature = {};
+has.software_package = {};
 
-has.feature.enabled = function (name, provider) {
-    return local.settings.host.feature.check_is_enabled(name, provider);
+has.software_package = function (soft_package, version) {
+    return local.settings.host.soft_package.check_is_installed(soft_package, version);
 };
 
-// File Specific Functionality
-has.file = {};
 
-has.file.which_exists = function (file) {
-    return local.settings.host.file.exists(file);
+// User Specific Functionality
+has.user = {};
+
+has.user = function (user) {
+    has.user.username = user;
+    return local.settings.host.user.check_exists(user);
 };
 
-has.file.which_is_a_file = function (file) {
-    return local.settings.host.file.check_is_file(file);
+has.user.who_belongs_to_group = function (user, group) {
+    if (group === undefined && has.user.username !== undefined) {
+        // Use the last username instead
+        group = user;
+        user = has.user.username;
+    }
+
+    return local.settings.host.user.check_belongs_to_group(user, group);
 };
 
-has.file.which_is_a_directory = function (dir) {
-    return local.settings.host.file.check_is_directory(dir);
-};
-
-has.file.which_is_hidden = function (file) {
-    return local.settings.host.file.check_is_hidden(file);
-};
-
-has.file.which_is_readonly = function (file) {
-    return local.settings.host.file.check_is_readonly(file);
-};
-
-has.file.which_is_system_file = function (file) {
-    return local.settings.host.file.check_is_system(file);
-};
-
-has.file.content = function (file) {
-    return local.settings.host.file.get_content(file);
-};
 
 has.file.accesible_by_user = function (file, user, access) {
     return local.settings.host.file.check_is_accessible_by_user(file, user, access);

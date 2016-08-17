@@ -1,6 +1,6 @@
 baseParams = {};
 
-// todo: THe hotfix script returns a lot of debug which is not required, need to cleanup
+// todo: The hotfix script returns a lot of debug which is not required, need to cleanup
 // so that only True or False is returned
 
 function check_is_installed(description, hot_fix_id) {
