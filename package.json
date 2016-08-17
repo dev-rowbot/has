@@ -1,14 +1,10 @@
 {
-  "name": "node-winrm",
-  "version": "1.0.0",
+  "name": "has",
+  "version": "0.0.1",
   "description": "Test framework based on Serverspec",
   "main": "index.js",
   "dependencies": {
     "loglevel": "^1.4.1",
-    "winrmjs": "git+ssh://git@github.com/dev-rowbot/winrmjs.git"
-  },
-  "devDependencies": {
-    "https": "^1.0.0",
     "winrmjs": "git+ssh://git@github.com/dev-rowbot/winrmjs.git"
   },
   "scripts": {
@@ -16,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thedevopsapprentice/node-winrm.git"
+    "url": "git+https://github.com/dev-rowbot/has.git"
   },
   "keywords": [
     "winrm",
@@ -26,7 +22,7 @@
   "author": "Eugene Duvenage",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thedevopsapprentice/node-winrm/issues"
+    "url": "https://github.com/dev-rowbot/has/issues"
   },
-  "homepage": "https://github.com/thedevopsapprentice/node-winrm#readme"
+  "homepage": "https://github.com/dev-rowbot/has#readme"
 }
