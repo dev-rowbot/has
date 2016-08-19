@@ -450,7 +450,7 @@ has.service.installed = function (service) {
 
 has.service.with_start_mode = function (service, mode) {
     has.service.service = service;
-    return local.settings.host.service.check_has_start_mode(service);
+    return local.settings.host.service.check_has_start_mode(service, mode);
 };
 
 has.service.enabled = function (service, level) {
