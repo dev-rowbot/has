@@ -1,7 +1,7 @@
 {
   "name": "has",
-  "version": "0.0.1",
-  "description": "Test framework based on Serverspec",
+  "version": "0.0.2",
+  "description": "Host Assertion Suite based on Serverspec for validating network infrastructure",
   "main": "index.js",
   "dependencies": {
     "loglevel": "^1.4.1",
@@ -17,10 +17,12 @@
   "keywords": [
     "winrm",
     "powershell",
-    "serverspec"
+    "serverspec",
+    "specinfra",
+    "jasmine"
   ],
-  "author": "Eugene Duvenage",
-  "license": "ISC",
+  "author": "Rowan Potgieter",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dev-rowbot/has/issues"
   },
