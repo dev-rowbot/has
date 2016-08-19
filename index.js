@@ -19,8 +19,18 @@ local.settings = {
 };
 
 // has specific functionality
+/**
+ * The Host Assertion Suite framework
+ * @namespace
+ */
 var has = module.exports = {};
 
+/**
+ * The has environment. You should get the default settings first and then
+ * set with your updated params. 
+ * @namespace
+ */
+has.environment = {};
 /**
  * Setup the environment - **needs to be called before any other commands** 
  * @param {object} settings - The settings to used
@@ -68,6 +78,11 @@ has.environment.default = function () {
     };
 };
 // Feature Specific Functionality
+/**
+ * Check if a host has a windows feature enabled/installed. 
+ * The provider is optional and can be used to validate how the feature was installed
+ * @namespace
+ */
 has.feature = {};
 
 /**
@@ -106,6 +121,11 @@ local.file.exec = function (file, func) {
 };
 
 // File
+/**
+ * File specific functionality. Use this to validate that a host has all the correct files.
+ * This is useful if you need to ensure config files are in place for services/applications.
+ * @namespace
+ */
 has.file = {};
 
 /**
@@ -313,6 +333,10 @@ has.file.owned_by = function (file, owner) {
 };
 
 // Group Specific Functionality
+/**
+ * Check that a user group exists on a server
+ * @namespace
+ */
 has.group = {};
 
 /**
@@ -325,6 +349,10 @@ has.group = function (group) {
 };
 
 // Host Specific Functionality
+/**
+ * Check that a host can see the outside world
+ * @namespace
+ */
 has.host = {};
 
 /**
@@ -350,6 +378,10 @@ has.host.reachable = function (host, protocol, timeout, port) {
 };
 
 // Hotfix Specific Functionality
+/**
+ * Check that a host has a windows hotfix installed
+ * @namespace
+ */
 has.hotfix = {};
 
 has.hotfix.installed = function (description, hot_fix_id) {
@@ -357,6 +389,10 @@ has.hotfix.installed = function (description, hot_fix_id) {
 };
 
 // IIS App Pool Specific Functionality
+/**
+ * IIS Application Pool checks. 
+ * @namespace
+ */
 has.iis_app_pool = {};
 
 /**
@@ -493,6 +529,10 @@ has.iis_app_pool.which_has_managed_pipeline_mode = function (name, option) {
 };
 
 // IIS Website Specific Functionality
+/**
+ * IIS Website checks. 
+ * @namespace
+ */
 has.iis_website = {};
 
 has.iis_website.which_is_enabled = function (name) {
@@ -599,6 +639,10 @@ has.iis_website.with_site_application = function (name, app, pool, physical_path
 };
 
 // Port Specific Functionality
+/**
+ * Check if a host has all the correct ports configured.
+ * @namespace
+ */
 has.port = {};
 
 /**
@@ -627,6 +671,10 @@ has.port.listening.with_protocol = function (port, protocol) {
 };
 
 // Process Specific Functionality
+/**
+ * Test process properties
+ * @namespace
+ */
 has.process = {};
 
 /**
@@ -645,6 +693,10 @@ has.process.get = function (process, opts) {
 };
 
 // Reg Key Specific Functionality
+/**
+ * Check that a Windows host has the correct registry keys 
+ * @namespace
+ */
 has.registry_key = {};
 
 /**
@@ -658,6 +710,10 @@ has.registry_key = function (key_name) {
 };
 
 // Schedule Task Specific Functionality
+/**
+ * Check that a host has a task scheduled as expected
+ * @namespace
+ */
 has.scheduled_task = {};
 
 /**
@@ -671,6 +727,10 @@ has.scheduled_task = function (name) {
 };
 
 // Service Task Specific Functionality
+/**
+ * Check that a host has all the correct services installed and that they are in the right state
+ * @namespace
+ */
 has.service = {};
 
 /**
@@ -725,7 +785,11 @@ has.service.with_property = function (service, property) {
     return local.settings.host.service.check_has_property(service, property);
 };
 
-// Feature Specific Functionality
+// Software Package Specific Functionality
+/**
+ * Check that a host has the right software packages installed
+ * @namespace
+ */
 has.software_package = {};
 
 /**
@@ -740,6 +804,10 @@ has.software_package = function (soft_package, version) {
 
 
 // User Specific Functionality
+/**
+ * Check a host has the correct users
+ * @namespace
+ */
 has.user = {};
 
 /**

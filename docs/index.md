@@ -1,6 +1,10 @@
+  - [has](#has)
+  - [has.environment](#hasenvironment)
   - [has.environment()](#hasenvironmentsettingsobjectdebuglevelstring)
   - [has.environment.default()](#hasenvironmentdefault)
+  - [has.feature](#hasfeature)
   - [has.feature.enabled()](#hasfeatureenablednamestringproviderstring)
+  - [has.file](#hasfile)
   - [has.file()](#hasfilefilestring)
   - [has.file.which_is_a_file()](#hasfilewhich_is_a_filefilestring)
   - [has.file.which_is_a_directory()](#hasfilewhich_is_a_directoryfilestring)
@@ -14,9 +18,13 @@
   - [has.file.which_contains_between()](#hasfilewhich_contains_betweenfilestringpatternstringfromstringtostring)
   - [has.file.with_version()](#hasfilewith_versionfilestringversionstring)
   - [has.file.owned_by()](#hasfileowned_byfilestringownerstring)
+  - [has.group](#hasgroup)
   - [has.group()](#hasgroupgroupstring)
+  - [has.host](#hashost)
   - [has.host.resolvable()](#hashostresolvablenamestringtypestring)
   - [has.host.reachable()](#hashostreachablenamestringprotcolstringtimeoutstringportstring)
+  - [has.hotfix](#hashotfix)
+  - [has.iis_app_pool](#hasiis_app_pool)
   - [has.iis_app_pool.which_exists()](#hasiis_app_poolwhich_existsnamestring)
   - [has.iis_app_pool.with_dotnet_version()](#hasiis_app_poolwith_dotnet_versionnamestringverisonstring)
   - [has.iis_app_pool.with_32bit_enabled()](#hasiis_app_poolwith_32bit_enablednamestring)
@@ -26,6 +34,7 @@
   - [has.iis_app_pool.which_has_username()](#hasiis_app_poolwhich_has_usernamenamestringusernamestring)
   - [has.iis_app_pool.with_periodic_restart_of()](#hasiis_app_poolwith_periodic_restart_ofnamestringtimeoutstring)
   - [has.iis_app_pool.which_has_managed_pipeline_mode()](#hasiis_app_poolwhich_has_managed_pipeline_modenamestringmodestring)
+  - [has.iis_website](#hasiis_website)
   - [has.iis_website.installed()](#hasiis_websiteinstallednamestring)
   - [has.iis_website.running()](#hasiis_websiterunningnamestring)
   - [has.iis_website.in_app_pool()](#hasiis_websitein_app_poolnamestringpoolstring)
@@ -33,19 +42,35 @@
   - [has.iis_website.with_site_bindings()](#hasiis_websitewith_site_bindingsnamestringportstringprotocolstringipaddressstringhost_headerstring)
   - [has.iis_website.with_virtual_directory()](#hasiis_websitewith_virtual_directorynamestringvdirstringpathstring)
   - [has.iis_website.with_site_application()](#hasiis_websitewith_site_applicationnamestringappstringpoolstringphysical_pathstring)
+  - [has.port](#hasport)
   - [has.port.listening()](#hasportlisteningportstring)
   - [has.port.listening.with_protocol()](#hasportlisteningwith_protocolportstringprotocolstring)
+  - [has.process](#hasprocess)
   - [has.process.check()](#hasprocesscheckprocessstring)
+  - [has.registry_key](#hasregistry_key)
   - [has.registry_key()](#hasregistry_keykey_namestring)
+  - [has.scheduled_task](#hasscheduled_task)
   - [has.scheduled_task()](#hasscheduled_tasknamestring)
+  - [has.service](#hasservice)
   - [has.service.installed()](#hasserviceinstalledservicestring)
   - [has.service.with_start_mode()](#hasservicewith_start_modeservicestringmodestring)
   - [has.service.enabled()](#hasserviceenabledservicestring)
   - [has.service.running()](#hasservicerunningservicestring)
   - [has.service.with_property()](#hasservicewith_propertyservicestringpropertystring)
+  - [has.software_package](#hassoftware_package)
   - [has.software_package()](#hassoftware_packagesoft_packagestringversionstring)
+  - [has.user](#hasuser)
   - [has.user()](#hasuseruserstring)
   - [has.user.who_belongs_to_group()](#hasuserwho_belongs_to_groupuserstringgroupstring)
+
+## has
+
+  
+
+## has.environment
+
+  The has environment. You should get the default settings first and then
+  set with your updated params.
 
 ## has.environment(settings:object, debugLevel:string)
 
@@ -55,9 +80,19 @@
 
   Get the default environment settings
 
+## has.feature
+
+  Check if a host has a windows feature enabled/installed. 
+  The provider is optional and can be used to validate how the feature was installed
+
 ## has.feature.enabled(name:string, [provider]:string)
 
   Check if Windows host has a Feature enabled/installed
+
+## has.file
+
+  File specific functionality. Use this to validate that a host has all the correct files.
+  This is useful if you need to ensure config files are in place for services/applications.
 
 ## has.file(file:string)
 
@@ -111,9 +146,17 @@
 
   Check if a file is owned by a user
 
+## has.group
+
+  Check that a user group exists on a server
+
 ## has.group(group:string)
 
   Check if a group exists
+
+## has.host
+
+  Check that a host can see the outside world
 
 ## has.host.resolvable(name:string, type:string)
 
@@ -122,6 +165,14 @@
 ## has.host.reachable(name:string, protcol:string, timeout:string, port:string)
 
   Check if a host is network reachable
+
+## has.hotfix
+
+  Check that a host has a windows hotfix installed
+
+## has.iis_app_pool
+
+  IIS Application Pool checks.
 
 ## has.iis_app_pool.which_exists(name:string)
 
@@ -159,6 +210,10 @@
 
   Check the IIS App Pool has the correct managed piepline mode
 
+## has.iis_website
+
+  IIS Website checks.
+
 ## has.iis_website.installed(name:string)
 
   Check the IIS Web Site is installed
@@ -187,6 +242,10 @@
 
   Check the IIS Web Site has a site application configured
 
+## has.port
+
+  Check if a host has all the correct ports configured.
+
 ## has.port.listening(port:string)
 
   Check the host has a port listening
@@ -195,17 +254,33 @@
 
   Check the host has a port listening with a specified protocol
 
+## has.process
+
+  Test process properties
+
 ## has.process.check(process:string)
 
   Check the host has a process
+
+## has.registry_key
+
+  Check that a Windows host has the correct registry keys
 
 ## has.registry_key(key_name:string)
 
   Check the windows host has the specified registry key
 
+## has.scheduled_task
+
+  Check that a host has a task scheduled as expected
+
 ## has.scheduled_task(name:string)
 
   Check the windows host has a task scheduled
+
+## has.service
+
+  Check that a host has all the correct services installed and that they are in the right state
 
 ## has.service.installed(service:string)
 
@@ -227,9 +302,17 @@
 
   Check the properties of a hosts service
 
+## has.software_package
+
+  Check that a host has the right software packages installed
+
 ## has.software_package(soft_package:string, [version]:string)
 
   Check the host has a software package installed
+
+## has.user
+
+  Check a host has the correct users
 
 ## has.user(user:string)
 
