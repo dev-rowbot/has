@@ -414,11 +414,6 @@ has.port.listening.with_protocol = function (port, protocol) {
 // Process Specific Functionality
 has.process = {};
 
-has.process.properties = function (process, property) {
-    has.process.process = process;
-    return local.settings.host.process.get_process_property(process, property);
-};
-
 has.process.check = function (process) {
     has.process.process = process;
     return local.settings.host.process.check_process(process);
@@ -448,29 +443,29 @@ has.scheduled_task = function (name) {
 // Schedule Task Specific Functionality
 has.service = {};
 
-has.service.installed = function (name) {
-    has.service.name = name;
-    return local.settings.host.service.check_is_installed(name);
+has.service.installed = function (service) {
+    has.service.service = service;
+    return local.settings.host.service.check_is_installed(service);
 };
 
 has.service.with_start_mode = function (service, mode) {
-    has.service.name = name;
-    return local.settings.host.service.check_has_start_mode(name);
+    has.service.service = service;
+    return local.settings.host.service.check_has_start_mode(service);
 };
 
 has.service.enabled = function (service, level) {
-    has.service.name = name;
-    return local.settings.host.service.check_is_enabled(name);
+    has.service.service = service;
+    return local.settings.host.service.check_is_enabled(service);
 };
 
 has.service.running = function (service) {
-    has.service.name = name;
-    return local.settings.host.service.check_is_running(name);
+    has.service.service = service;
+    return local.settings.host.service.check_is_running(service);
 };
 
 has.service.with_property = function (service, property) {
-    has.service.name = name;
-    return local.settings.host.service.check_has_property(name, property);
+    has.service.service = service;
+    return local.settings.host.service.check_has_property(service, property);
 };
 
 // Feature Specific Functionality
