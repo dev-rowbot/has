@@ -114,9 +114,14 @@ var has = function () {
         this.filename = filename;
         if (this.file.parent === undefined) {
             this.file.parent = this;
+            // this is a hack to init the parent object
+            if (filename === undefined) {
+                return;
+            }
         }
         return this.base.file.check_exists.call(this, filename);
     };
+    hasObject.file();
 
     // We need to validate the file exists before attempting the next command
     hasObject.file.exec = function (file, func) {
@@ -562,7 +567,7 @@ var has = function () {
         }
     };
     hasObject.iis_website();
-    
+
     hasObject.iis_website.which_is_enabled = function (name) {
         this.name = name;
         return this.parent.base.iis_website.check_is_enabled.call(this.parent, name);
@@ -866,9 +871,14 @@ var has = function () {
         this.username = user;
         if (this.user.parent === undefined) {
             this.user.parent = this;
+            // hack to init the parent object
+            if (user === undefined) {
+                return;
+            }
         }
         return this.base.user.check_exists.call(this, user);
     };
+    hasObject.user();
 
     /**
      * Check the host has a user who belongs to a specific group

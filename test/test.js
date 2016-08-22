@@ -12,7 +12,7 @@ settings.password = 'vagrant';
 settings.protocol = 'http';
 has.environment(settings, 'DEBUG');
 
-has.file('c:\\test').then(function (result) {
+has.file.with_version('c:\\ProgramData\\chocolatey\\choco.exe', '0.9.9.12').then(function (result) {
     console.log(result);
     console.log("========================");
     return has.file.with_version('c:\\ProgramData\\chocolatey\\choco.exe', '0.9.9.12');
