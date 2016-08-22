@@ -1,6 +1,6 @@
-baseParams = {};
+var soft_package = function () {};
 
-function check_is_installed(soft_package, version) {
+soft_package.prototype.check_is_installed = function (soft_package, version) {
     const script = 'find_installed_application.ps1';
     var cmd = '';
     package_version = '';
@@ -8,15 +8,8 @@ function check_is_installed(soft_package, version) {
         package_version = `-appVersion '${version}'`;
     }
     cmd = `(FindInstalledApplication -appName '${soft_package}' ${package_version}) -eq $true`;
-    return baseParams.exec(cmd, script);
+    return this.base.exec(cmd, script);
 
-}
-
-function setParams (params) {
-    baseParams = params;    
-}
-
-module.exports = {
-    setParams: setParams,
-    check_is_installed: check_is_installed
 };
+
+module.exports = new soft_package();

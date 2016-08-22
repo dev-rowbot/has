@@ -1,19 +1,12 @@
-baseParams = {};
+var registry_key = function () {};
 
-function check_exists(key_name) {
+registry_key.prototype.check_exists = function (key_name) {
     var cmd = `(Get-Item 'Registry::${key_name}') -ne $null`;
-    return baseParams.exec(cmd);
+    return this.base.exec(cmd);
 
-}
+};
 
 // Todo: Finish implementation
 
-function setParams(params) {
-    baseParams = params;
-}
-
-module.exports = {
-    setParams: setParams,
-    check_exists: check_exists,
-};
+module.exports = new registry_key();
 

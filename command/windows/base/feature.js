@@ -1,6 +1,6 @@
-baseParams = {};
+var feature = function () { };
 
-function check_is_enabled(name, provider) {
+feature.prototype.check_is_enabled = function (name, provider) {
     const script = 'list_windows_features.ps1';
     var cmd = '';
     if (typeof provider === 'undefined') {
@@ -8,16 +8,9 @@ function check_is_enabled(name, provider) {
     } else {
         cmd = `@(ListWindowsFeatures -feature ${name} -provider ${provider}).count -gt 0`;
     }
-    return baseParams.exec(cmd, script);
+    return this.base.exec(cmd, script);
 
-}
-
-function setParams(params) {
-    baseParams = params;
-}
-
-module.exports = {
-    setParams: setParams,
-    check_is_enabled: check_is_enabled
 };
+
+module.exports = new feature();
 

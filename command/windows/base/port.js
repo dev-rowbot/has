@@ -1,27 +1,19 @@
-baseParams = {};
-
-function check_is_listening(port) {
+var port = function () {};
+ 
+port.prototype.check_is_listening = function (port) {
     const script = 'is_port_listening.ps1';
     var cmd = '';
     cmd = `IsPortListening -portNumber ${port}`;
 
-    return baseParams.exec(cmd, script);
-}
+    return this.base.exec(cmd, script);
+};
 
-function check_is_listening_with_protocol(port, protocol) {
+port.prototype.check_is_listening_with_protocol = function (port, protocol) {
     const script = 'is_port_listening.ps1';
     var cmd = '';
     cmd = `IsPortListening -portNumber ${port} -protocol '${protocol}'`;
 
-    return baseParams.exec(cmd, script);
-}
-
-function setParams(params) {
-    baseParams = params;
-}
-
-module.exports = {
-    setParams: setParams,
-    check_is_listening: check_is_listening,
-    check_is_listening_with_protocol: check_is_listening_with_protocol
+    return this.base.exec(cmd, script);
 };
+
+module.exports = new port();

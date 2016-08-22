@@ -1,18 +1,11 @@
-baseParams = {};
+var scheduled_task = function () {};
 
-function check_exists(name) {
+scheduled_task.prototype.check_exists = function (name) {
     const script = 'find_scheduled_task.ps1';
     var cmd = `(FindScheduledTask -name '${name}').TaskName -eq '\\${name}'`;
-    return baseParams.exec(cmd, script);
+    return this.base.exec(cmd, script);
 
-}
-
-function setParams(params) {
-    baseParams = params;
-}
-
-module.exports = {
-    setParams: setParams,
-    check_exists: check_exists,
 };
+
+module.exports = new scheduled_task();
 

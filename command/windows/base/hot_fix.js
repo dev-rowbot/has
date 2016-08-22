@@ -1,9 +1,9 @@
-baseParams = {};
+var hotfix = function () { };
 
 // todo: The hotfix script returns a lot of debug which is not required, need to cleanup
 // so that only True or False is returned
 
-function check_is_installed(description, hot_fix_id) {
+hotfix.prototype.check_is_installed = function (description, hot_fix_id) {
     const script = 'find_installed_hot_fix.ps1';
 
     var hot_fix_id_match = description.match(/(KB\d+)/i);
@@ -13,16 +13,9 @@ function check_is_installed(description, hot_fix_id) {
 
     var cmd = `(FindInstalledHotFix -description "${description}" -hotFixId "${hot_fix_id}" -eq $true)`;
 
-    return baseParams.exec(cmd, script);
+    return this.base.exec(cmd, script);
 
-}
-
-function setParams(params) {
-    baseParams = params;
-}
-
-module.exports = {
-    setParams: setParams,
-    check_is_installed: check_is_installed
 };
+
+module.exports = new hotfix();
 
