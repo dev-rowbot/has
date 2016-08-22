@@ -20,6 +20,14 @@ has.file('c:\\test').then(function (result) {
 .then(function (result) {
     console.log(result);
     console.log("========================");
+    return has.file.which_is_a_directory('c:\\ProgramData\\chocolatey\\');
+})
+.then(function (result) {
+    console.log(result);
+    console.log("========================");
+})
+.catch (function (result) {
+    console.log (result);
 });
 
 has.service.installed('filebeat').then(function (result) {

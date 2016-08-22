@@ -146,7 +146,7 @@ var has = function () {
     hasObject.file.which_is_a_file = function (file) {
         hasObject.file.filename = file;
 
-        return hasObject.file.exec(file, this.parent.file.check_is_file);
+        return hasObject.file.exec(file, this.parent.base.file.check_is_file);
     };
 
     /**
@@ -156,7 +156,7 @@ var has = function () {
      */
     hasObject.file.which_is_a_directory = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.check_is_directory);
+        return hasObject.file.exec(file, this.parent.base.file.check_is_directory);
     };
 
     /**
@@ -166,7 +166,7 @@ var has = function () {
      */
     hasObject.file.which_is_hidden = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.check_is_hidden);
+        return hasObject.file.exec(file, this.parent.base.file.check_is_hidden);
     };
 
     /**
@@ -176,7 +176,7 @@ var has = function () {
      */
     hasObject.file.which_is_readonly = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.check_is_readonly);
+        return hasObject.file.exec(file, this.parent.base.file.check_is_readonly);
     };
 
     /**
@@ -186,7 +186,7 @@ var has = function () {
      */
     hasObject.file.which_is_a_system_file = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.check_is_system);
+        return hasObject.file.exec(file, this.parent.base.file.check_is_system);
     };
 
     /**
@@ -196,7 +196,7 @@ var has = function () {
      */
     hasObject.file.get_content = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.get_content);
+        return hasObject.file.exec(file, this.parent.base.file.get_content);
     };
 
     /**
@@ -206,7 +206,7 @@ var has = function () {
      */
     hasObject.file.md5 = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, this.parent.file.get_md5sum);
+        return hasObject.file.exec(file, this.parent.base.file.get_md5sum);
     };
 
     /**
@@ -561,7 +561,8 @@ var has = function () {
             this.iis_website.parent = this;
         }
     };
-
+    hasObject.iis_website();
+    
     hasObject.iis_website.which_is_enabled = function (name) {
         this.name = name;
         return this.parent.base.iis_website.check_is_enabled.call(this.parent, name);
