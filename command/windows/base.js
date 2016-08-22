@@ -25,9 +25,6 @@ base = function () {
     baseObject.exec = function (cmd, script) {
         var dfd = q.defer();
 
-        log.error('EXEC: ' + this.name);
-        log.error('HOST ' + this.winrmParams.host + ' ==> CMD ' + cmd);
-
         var run_params = winrm.get_run_params(this.winrmParams.host,
             this.winrmParams.port,
             this.winrmParams.path,
@@ -37,8 +34,8 @@ base = function () {
         run_params.script_root = this.winrmParams.script_root;
 
         // Verbose Debug
-        log.debug(JSON.stringify(run_params) + '\n');
-        log.debug('CMD: ' + cmd);
+        //log.debug(JSON.stringify(run_params) + '\n');
+        log.debug('HOST ==>' + this.winrmParams.host + ' ==> CMD: ' + cmd);
         log.debug('SCRIPT: ' + script);
 
         var result = false;

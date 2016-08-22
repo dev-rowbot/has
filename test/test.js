@@ -2,7 +2,7 @@
 /* eslint one-var: "off" */
 /* eslint vars-on-top: "off" */
 
-var has = require('../index.js');
+var has = require('../index.js')();
 
 var settings = has.environment.default();
 settings.os       = 'windows';

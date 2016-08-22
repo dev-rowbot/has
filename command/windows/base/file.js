@@ -15,10 +15,6 @@ function get_identity(by_whom) {
 file.prototype.check_exists = function (file) {
     var cmd = `Test-Path -Path "${file}"`;
 
-    console.log('FILE: ' + this.name + ' ==> ' + this.base.name + ' ==> XXX');
-    //console.log(this.base.winrmParams);
-    //console.log('COMP: ' + (this.base.exec === this.base.exec ? "true" : "false"));
-
     return this.base.exec(cmd);
 
 };

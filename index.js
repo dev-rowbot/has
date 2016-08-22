@@ -80,7 +80,12 @@ var has = function () {
      * The provider is optional and can be used to validate how the feature was installed
      * @namespace
      */
-    hasObject.feature = {};
+    hasObject.feature = function () {
+        if (this.feature.parent === undefined) {
+            this.feature.parent = this;
+        }
+    };
+    hasObject.feature();
 
     /**
      * Check if Windows host has a Feature enabled/installed
@@ -89,11 +94,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` - resolves ```true``` or ```false```
      */
     hasObject.feature.enabled = function (name, provider) {
-        return hasObject.base.feature.check_is_enabled(name, provider);
+        return this.parent.base.feature.check_is_enabled.call(this.parent, name, provider);
     };
-
-    // Local file functions to be used internally
-    hasObject.file = {};
 
     // File
     /**
@@ -113,7 +115,6 @@ var has = function () {
         if (this.file.parent === undefined) {
             this.file.parent = this;
         }
-        log.error('INDEX: ' + hasObject.name + ' ' + hasObject.base.name + ' ==> HOST ==> ' + hasObject.base.winrmParams.host);
         return this.base.file.check_exists.call(this, filename);
     };
 
@@ -145,7 +146,7 @@ var has = function () {
     hasObject.file.which_is_a_file = function (file) {
         hasObject.file.filename = file;
 
-        return hasObject.file.exec(file, hasObject.base.file.check_is_file);
+        return hasObject.file.exec(file, this.parent.file.check_is_file);
     };
 
     /**
@@ -155,7 +156,7 @@ var has = function () {
      */
     hasObject.file.which_is_a_directory = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.check_is_directory);
+        return hasObject.file.exec(file, this.parent.file.check_is_directory);
     };
 
     /**
@@ -165,7 +166,7 @@ var has = function () {
      */
     hasObject.file.which_is_hidden = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.check_is_hidden);
+        return hasObject.file.exec(file, this.parent.file.check_is_hidden);
     };
 
     /**
@@ -175,7 +176,7 @@ var has = function () {
      */
     hasObject.file.which_is_readonly = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.check_is_readonly);
+        return hasObject.file.exec(file, this.parent.file.check_is_readonly);
     };
 
     /**
@@ -185,7 +186,7 @@ var has = function () {
      */
     hasObject.file.which_is_a_system_file = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.check_is_system);
+        return hasObject.file.exec(file, this.parent.file.check_is_system);
     };
 
     /**
@@ -195,7 +196,7 @@ var has = function () {
      */
     hasObject.file.get_content = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.get_content);
+        return hasObject.file.exec(file, this.parent.file.get_content);
     };
 
     /**
@@ -205,7 +206,7 @@ var has = function () {
      */
     hasObject.file.md5 = function (file) {
         hasObject.file.filename = file;
-        return hasObject.file.exec(file, hasObject.base.file.get_md5sum);
+        return hasObject.file.exec(file, this.parent.file.get_md5sum);
     };
 
     /**
@@ -308,9 +309,9 @@ var has = function () {
             parent.base.file.check_has_version.call(parent, file, version).then(function (result) {
                 dfd.resolve(result);
             })
-            .catch(function (result) {console.log (result); });
+                .catch(function (result) { console.log(result); });
         })
-        .catch(function (result) {console.log (result); });
+            .catch(function (result) { console.log(result); });
         return dfd.promise;
     };
 
@@ -321,17 +322,18 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.file.owned_by = function (file, owner) {
-        hasObject.file.filename = file;
+        this.filename = file;
+        var parent = this.parent;
         var dfd = q.defer();
 
         // Check if the file exists first
-        hasObject.file(file).then(function (result) {
+        parent.file(file).then(function (result) {
             if (result === false) {
                 dfd.resolve(result);
                 return;
             }
             // now execute the function passed in
-            hasObject.base.file.check_is_owned_by(file, owner).then(function (result) {
+            parent.base.file.check_is_owned_by.call(parent, file, owner).then(function (result) {
                 dfd.resolve(result);
             });
         });
@@ -351,7 +353,7 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.group = function (group) {
-        return hasObject.base.group.check_exists(group);
+        return this.parent.base.group.check_exists.call(this, group);
     };
 
     // Host Specific Functionality
@@ -359,7 +361,12 @@ var has = function () {
      * Check that a host can see the outside world
      * @namespace
      */
-    hasObject.host = {};
+    hasObject.host = function () {
+        if (this.host.parent === undefined) {
+            this.host.parent = this;
+        }
+    };
+    hasObject.host();
 
     /**
      * Check if a host is resolvable
@@ -368,7 +375,7 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.host.resolvable = function (name, type) {
-        return hasObject.base.host.check_is_resolvable(name, type);
+        return this.parent.base.host.check_is_resolvable.call(this.parent, name, type);
     };
 
     /**
@@ -380,7 +387,7 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.host.reachable = function (host, protocol, timeout, port) {
-        return hasObject.base.host.check_is_reachable(host, protocol, timeout, port);
+        return this.parent.base.host.check_is_reachable.call(this.parent, host, protocol, timeout, port);
     };
 
     // Hotfix Specific Functionality
@@ -388,10 +395,15 @@ var has = function () {
      * Check that a host has a windows hotfix installed
      * @namespace
      */
-    hasObject.hotfix = {};
+    hasObject.hotfix = function () {
+        if (this.hotfix.parent === undefined) {
+            this.hotfix.parent = this;
+        }
+    };
+    hasObject.hotfix();
 
     hasObject.hotfix.installed = function (description, hot_fix_id) {
-        return hasObject.base.hotfix.check_is_installed(description, hot_fix_id);
+        return this.parent.base.hotfix.check_is_installed.call(this.parent, description, hot_fix_id);
     };
 
     // IIS App Pool Specific Functionality
@@ -399,7 +411,12 @@ var has = function () {
      * IIS Application Pool checks. 
      * @namespace
      */
-    hasObject.iis_app_pool = {};
+    hasObject.iis_app_pool = function () {
+        if (this.iis_app_pool.parent === undefined) {
+            this.iis_app_pool.parent = this;
+        }
+    };
+    hasObject.iis_app_pool();
 
     /**
      * Check if a IIS App Pool exists
@@ -407,8 +424,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.which_exists = function (name) {
-        hasObject.iis_app_pool.name = name;
-        return hasObject.base.iis_app_pool.check_exists(name);
+        this.name = name;
+        return this.parent.base.iis_app_pool.check_exists.call(name);
     };
 
     /**
@@ -418,15 +435,15 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_dotnet_version = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
 
-        return hasObject.base.iis_app_pool.check_has_dotnet_version(name, option);
+        return this.parent.base.iis_app_pool.check_has_dotnet_version.call(this.parent, name, option);
     };
 
     /**
@@ -435,8 +452,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_32bit_enabled = function (name) {
-        hasObject.iis_app_pool.name = name;
-        return hasObject.base.iis_app_pool.check_has_32bit_enabled(name);
+        this.name = name;
+        return this.parent.base.iis_app_pool.check_has_32bit_enabled.call(this.parent, name);
     };
 
     /**
@@ -445,15 +462,15 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_idle_timeout_of = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
 
-        return hasObject.base.iis_app_pool.check_has_idle_timeout(name, minutes);
+        return this.parent.base.iis_app_pool.check_has_idle_timeout.call(this.parent, name, minutes);
     };
 
     /**
@@ -463,14 +480,14 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_identity_type = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
-        return hasObject.base.iis_app_pool.check_has_identity_type(name, type);
+        return this.parent.base.iis_app_pool.check_has_identity_type.call(this.parent, name, type);
     };
 
     /**
@@ -479,8 +496,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_user_profile = function (name) {
-        hasObject.iis_app_pool.name = name;
-        return hasObject.base.iis_app_pool.check_has_user_profile(name);
+        this.name = name;
+        return this.parent.base.iis_app_pool.check_has_user_profile.call(this.parent, name);
     };
 
     /**
@@ -490,14 +507,14 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.which_has_username = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
-        return hasObject.base.iis_app_pool.check_has_username(name, username);
+        return this.parent.base.iis_app_pool.check_has_username.call(this.parent, name, option);
     };
 
     /**
@@ -507,14 +524,14 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.with_periodic_restart_of = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
-        return hasObject.base.iis_app_pool.check_has_periodic_restart(name, username);
+        return this.parent.base.iis_app_pool.check_has_periodic_restart.call(this.parent, name, option);
     };
 
     /**
@@ -524,14 +541,14 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_app_pool.which_has_managed_pipeline_mode = function (name, option) {
-        if (option === undefined && hasObject.iis_app_pool.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_app_pool.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_app_pool.name = name;
+            this.name = name;
         }
-        return hasObject.base.iis_app_pool.check_has_managed_pipeline_mode(name, username);
+        return this.parent.base.iis_app_pool.check_has_managed_pipeline_mode.call(this.parent, name, option);
     };
 
     // IIS Website Specific Functionality
@@ -539,11 +556,15 @@ var has = function () {
      * IIS Website checks. 
      * @namespace
      */
-    hasObject.iis_website = {};
+    hasObject.iis_website = function () {
+        if (this.iis_website.parent === undefined) {
+            this.iis_website.parent = this;
+        }
+    };
 
     hasObject.iis_website.which_is_enabled = function (name) {
-        hasObject.iis_website.name = name;
-        return hasObject.base.iis_website.check_is_enabled(name);
+        this.name = name;
+        return this.parent.base.iis_website.check_is_enabled.call(this.parent, name);
     };
 
     /**
@@ -552,8 +573,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.installed = function (name) {
-        hasObject.iis_website.name = name;
-        return hasObject.base.iis_website.check_is_installed(name);
+        this.name = name;
+        return this.parent.base.iis_website.check_is_installed.call(this.parent, name);
     };
 
     /**
@@ -562,8 +583,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.running = function (name) {
-        hasObject.iis_website.name = name;
-        return hasObject.base.iis_website.check_is_running(name);
+        this.name = name;
+        return this.parent.base.iis_website.check_is_running.call(this.parent, name);
     };
 
     /**
@@ -573,15 +594,15 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.in_app_pool = function (name, option) {
-        if (option === undefined && hasObject.iis_website.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_website.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_website.name = name;
+            this.name = name;
         }
 
-        return hasObject.base.iis_website.check_is_in_app_pool(name, option);
+        return this.parent.base.iis_website.check_is_in_app_pool.call(this.parent, name, option);
     };
 
     /**
@@ -591,15 +612,15 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.with_physical_path = function (name, option) {
-        if (option === undefined && hasObject.iis_website.name !== undefined) {
+        if (option === undefined && this.name !== undefined) {
             option = name;
-            name = hasObject.iis_website.name;
+            name = this.name;
         }
         else {
-            hasObject.iis_website.name = name;
+            this.name = name;
         }
 
-        return hasObject.base.iis_website.check_has_physical_path(name, option);
+        return this.parent.base.iis_website.check_has_physical_path.call(this.parent, name, option);
     };
 
     /**
@@ -612,9 +633,9 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.with_site_bindings = function (name, port, protocol, ipaddress, host_header) {
-        hasObject.iis_website.name = name;
+        this.name = name;
 
-        return hasObject.base.iis_website.check_has_site_bindings(name, port, protocol, ipaddress, host_header);
+        return this.parent.base.iis_website.check_has_site_bindings.call(this.parent, name, port, protocol, ipaddress, host_header);
     };
 
     /**
@@ -625,9 +646,9 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.with_virtual_directory = function (name, vdir, path) {
-        hasObject.iis_website.name = name;
+        this.name = name;
 
-        return hasObject.base.iis_website.check_has_virtual_dir(name, vdir, path);
+        return this.parent.base.iis_website.check_has_virtual_dir.call(this.parent, name, vdir, path);
     };
 
     /**
@@ -639,9 +660,9 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.iis_website.with_site_application = function (name, app, pool, physical_path) {
-        hasObject.iis_website.name = name;
+        this.name = name;
 
-        return hasObject.base.iis_website.check_has_site_application(name, port, protocol, ipaddress, host_header);
+        return this.parent.base.iis_website.check_has_site_application.call(this.parent, name, port, protocol, ipaddress, host_header);
     };
 
     // Port Specific Functionality
@@ -649,7 +670,12 @@ var has = function () {
      * Check if a host has all the correct ports configured.
      * @namespace
      */
-    hasObject.port = {};
+    hasObject.port = function () {
+        if (this.port.parent === undefined) {
+            this.port.parent = this;
+        }
+    };
+    hasObject.port();
 
     /**
      * Check the host has a port listening
@@ -657,8 +683,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.port.listening = function (port) {
-        port.port = port;
-        return hasObject.base.port.check_is_listening(port);
+        this.port = port;
+        return this.parent.base.port.check_is_listening.call(this.parent, port);
     };
 
     /**
@@ -668,12 +694,12 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.port.listening.with_protocol = function (port, protocol) {
-        if (protocol === undefined && port.port !== undefined) {
+        if (protocol === undefined && this.port !== undefined) {
             // Use the last port instead
             protocol = port;
-            port = port.port;
+            port = this.port;
         }
-        return hasObject.base.port.check_is_listening_with_protocol(port, protocol);
+        return this.parent.base.port.check_is_listening_with_protocol.call(this.parent, port, protocol);
     };
 
     // Process Specific Functionality
@@ -681,7 +707,12 @@ var has = function () {
      * Test process properties
      * @namespace
      */
-    hasObject.process = {};
+    hasObject.process = function () {
+        if (this.process.parent === undefined) {
+            this.process.parent = this;
+        }
+    };
+    hasObject.process();
 
     /**
      * Check the host has a process
@@ -689,13 +720,13 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.process.check = function (process) {
-        process.process = process;
-        return hasObject.base.process.check_process(process);
+        this.process = process;
+        return this.parent.base.process.check_process.call(this.parent, process);
     };
 
     hasObject.process.get = function (process, opts) {
-        process.process = process;
-        return hasObject.base.process.get(process, opts);
+        this.process = process;
+        return this.parent.base.process.get.call(this.parent, process, opts);
     };
 
     // Reg Key Specific Functionality
@@ -703,7 +734,12 @@ var has = function () {
      * Check that a Windows host has the correct registry keys 
      * @namespace
      */
-    hasObject.registry_key = {};
+    hasObject.registry_key = function () {
+        if (this.registry_key.parent === undefined) {
+            this.registry_key.parent = this;
+        }
+    };
+    hasObject.registry_key();
 
     /**
      * Check the windows host has the specified registry key
@@ -711,8 +747,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.registry_key = function (key_name) {
-        registry_key.key_name = key_name;
-        return hasObject.base.registry_key.check_exists(key_name);
+        this.key_name = key_name;
+        return this.parent.base.registry_key.check_exists.call(this.parent, key_name);
     };
 
     // Schedule Task Specific Functionality
@@ -720,7 +756,12 @@ var has = function () {
      * Check that a host has a task scheduled as expected
      * @namespace
      */
-    hasObject.scheduled_task = {};
+    hasObject.scheduled_task = function () {
+        if (this.scheduled_task.parent === undefined) {
+            this.scheduled_task.parent = this;
+        }
+    };
+    hasObject.scheduled_task();
 
     /**
      * Check the windows host has a task scheduled
@@ -728,8 +769,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.scheduled_task = function (name) {
-        scheduled_task.name = name;
-        return hasObject.base.scheduled_task.check_exists(name);
+        this.name = name;
+        return this.parent.base.scheduled_task.check_exists.call(this.parent, name);
     };
 
     // Service Task Specific Functionality
@@ -737,7 +778,12 @@ var has = function () {
      * Check that a host has all the correct services installed and that they are in the right state
      * @namespace
      */
-    hasObject.service = {};
+    hasObject.service = function () {
+        if (this.service.parent === undefined) {
+            this.service.parent = this;
+        }
+    };
+    hasObject.service();
 
     /**
      * Check the host has a service installed
@@ -745,8 +791,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.service.installed = function (service) {
-        service.service = service;
-        return hasObject.base.service.check_is_installed(service);
+        this.service = service;
+        return this.parent.base.service.check_is_installed.call(this.parent, service);
     };
 
     /**
@@ -756,8 +802,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.service.with_start_mode = function (service, mode) {
-        service.service = service;
-        return hasObject.base.service.check_has_start_mode(service, mode);
+        this.service = service;
+        return this.parent.base.service.check_has_start_mode.call(this.parent, service, mode);
     };
 
     /**
@@ -766,8 +812,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.service.enabled = function (service, level) {
-        service.service = service;
-        return hasObject.base.service.check_is_enabled(service);
+        this.service = service;
+        return this.parent.base.service.check_is_enabled.call(this.parent, service);
     };
 
     /**
@@ -776,8 +822,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.service.running = function (service) {
-        service.service = service;
-        return hasObject.base.service.check_is_running(service);
+        this.service = service;
+        return this.parent.base.service.check_is_running.call(this.service, service);
     };
 
     /**
@@ -787,8 +833,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.service.with_property = function (service, property) {
-        service.service = service;
-        return hasObject.base.service.check_has_property(service, property);
+        this.service = service;
+        return this.parent.base.service.check_has_property.call(service, property);
     };
 
     // Software Package Specific Functionality
@@ -805,7 +851,7 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.software_package = function (soft_package, version) {
-        return hasObject.base.soft_package.check_is_installed(soft_package, version);
+        return this.parent.base.soft_package.check_is_installed.call(this.parent, soft_package, version);
     };
 
 
@@ -814,7 +860,12 @@ var has = function () {
      * Check a host has the correct users
      * @namespace
      */
-    hasObject.user = {};
+    hasObject.user = function () {
+        if (this.user.parent === undefined) {
+            this.user.parent = this;
+        }
+    };
+
 
     /**
      * Check the host has a user added/avaialble
@@ -822,8 +873,8 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.user = function (user) {
-        user.username = user;
-        return hasObject.base.user.check_exists(user);
+        this.username = user;
+        return this.parent.base.user.check_exists.call(this.parent, user);
     };
 
     /**
@@ -833,13 +884,13 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.user.who_belongs_to_group = function (user, group) {
-        if (group === undefined && user.username !== undefined) {
+        if (group === undefined && this.username !== undefined) {
             // Use the last username instead
             group = user;
-            user = user.username;
+            user = this.username;
         }
 
-        return hasObject.base.user.check_belongs_to_group(user, group);
+        return this.parent.base.user.check_belongs_to_group.call(this.parent, user, group);
     };
     return hasObject;
 

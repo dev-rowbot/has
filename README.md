@@ -18,10 +18,13 @@ npm install --save-dev git+ssh://git@github.com:dev-rowbot/has.git
 HAS uses `loglevel` internally for debug, you can alter the default debug levels to see more info around commands and results.
 Simply pass the required loglevel to `has.environment(os, hostname, user, password, loglevel)`   
 
+**CAUTION:** HAS does not behave as a singleton - it follows a module pattern to
+avoid issue with asynchronous calls during testing. 
+
 A simple example for checking if a user exists and belongs to a group:   
 
 ```javascript
-var has = require('./index.js');
+var has = require('./index.js')();
 
 var settings = has.environment.default();
 settings.os       = 'windows'; 
@@ -64,7 +67,7 @@ hostList.forEach(function (hostname) {
     /* ---------------------------------------------------- */
     /* Setup 'has' for each host                            */
     /* ---------------------------------------------------- */
-    var has = require('has');
+    var has = require('has')();
     var hostSettings = has.environment.default();
 
     hostSettings.os = 'windows';

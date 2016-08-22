@@ -15,26 +15,19 @@ settings.username = 'Vagrant';
 settings.password = 'vagrant';
 settings.protocol = 'http';
 has[0].environment(settings);
-console.log("Test 0: " + has[0].name);
-console.log("========================");
+console.log("START Test 0: " + has[0].name);
 
-has[0].file('c:\\test').then(function (result) {
-    console.log("Test 0: " + has[0].name);
-    console.log("========================");
-    //console.log(result);
+has[0].file('c:\\test.txt').then(function (result) {
+    console.log("Test 0: " + has[0].name + " test.txt ==> " + result);
     return has[0].file.with_version('c:\\ProgramData\\chocolatey\\choco.exe', '0.9.9.12');
 })
     .then(function (result) {
-        console.log("Test 0: " + has[0].name);
-        console.log("========================");
-        //console.log(result);
-        return has[0].file.which_is_a_file('c:\\ProgramData\\chocolatey\\choco.exe');
+        console.log("Test 0: " + has[0].name + " Version ==> " + result);
+        return has[0].feature.enabled('IIS-Webserver', 'dism');
         
     })
     .then(function (result) {
-        console.log("Test 0: " + has[0].name);
-        console.log("========================");
-        console.log(result);
+        console.log("Test 0: " + has[0].name + " Feature ==> " + result);
         
     })
     .catch(function (result) {console.log (result);});
@@ -48,19 +41,14 @@ if (1) {
     settings.password = 'vagrant';
     settings.protocol = 'http';
     has[1].environment(settings);
-    console.log("Test 1: " + has[1].name);
-    console.log("========================");
+    console.log("START Test 1: " + has[1].name);
 
-    has[1].file('c:\\test').then(function (result) {
-        console.log("Test 1: " + has[1].name);
-        console.log("========================");
-        //console.log(result);
+    has[1].file('c:\\test.txt').then(function (result) {
+        console.log("Test 1: " + has[1].name + " test.txt ==> " + result);
         return has[1].file.with_version('c:\\ProgramData\\chocolatey\\choco.exe', '0.9.9.12');
     })
         .then(function (result) {
-            console.log("Test 1: " + has[1].name);
-            console.log("========================");
-            //console.log(result);
+            console.log("Test 1: " + has[1].name + " Version ==> " + result);
         });
 
 }
