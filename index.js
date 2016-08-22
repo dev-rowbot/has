@@ -734,12 +734,7 @@ var has = function () {
      * Check that a Windows host has the correct registry keys 
      * @namespace
      */
-    hasObject.registry_key = function () {
-        if (this.registry_key.parent === undefined) {
-            this.registry_key.parent = this;
-        }
-    };
-    hasObject.registry_key();
+    hasObject.registry_key = {};
 
     /**
      * Check the windows host has the specified registry key
@@ -748,7 +743,11 @@ var has = function () {
      */
     hasObject.registry_key = function (key_name) {
         this.key_name = key_name;
-        return this.parent.base.registry_key.check_exists.call(this.parent, key_name);
+        if (this.registry_key.parent === undefined) {
+            this.registry_key.parent = this;
+        }
+
+        return this.base.registry_key.check_exists.call(this, key_name);
     };
 
     // Schedule Task Specific Functionality
@@ -756,12 +755,7 @@ var has = function () {
      * Check that a host has a task scheduled as expected
      * @namespace
      */
-    hasObject.scheduled_task = function () {
-        if (this.scheduled_task.parent === undefined) {
-            this.scheduled_task.parent = this;
-        }
-    };
-    hasObject.scheduled_task();
+    hasObject.scheduled_task = {};
 
     /**
      * Check the windows host has a task scheduled
@@ -770,7 +764,7 @@ var has = function () {
      */
     hasObject.scheduled_task = function (name) {
         this.name = name;
-        return this.parent.base.scheduled_task.check_exists.call(this.parent, name);
+        return this.base.scheduled_task.check_exists.call(this, name);
     };
 
     // Service Task Specific Functionality
@@ -823,7 +817,7 @@ var has = function () {
      */
     hasObject.service.running = function (service) {
         this.service = service;
-        return this.parent.base.service.check_is_running.call(this.service, service);
+        return this.parent.base.service.check_is_running.call(this.parent, service);
     };
 
     /**
@@ -834,7 +828,7 @@ var has = function () {
      */
     hasObject.service.with_property = function (service, property) {
         this.service = service;
-        return this.parent.base.service.check_has_property.call(service, property);
+        return this.parent.base.service.check_has_property.call(this.parent, service, property);
     };
 
     // Software Package Specific Functionality
@@ -851,7 +845,7 @@ var has = function () {
      * @returns {Promise} A promise - resolves ```true``` or ```false``` 
      */
     hasObject.software_package = function (soft_package, version) {
-        return this.parent.base.soft_package.check_is_installed.call(this.parent, soft_package, version);
+        return this.base.soft_package.check_is_installed.call(this, soft_package, version);
     };
 
 
@@ -860,12 +854,7 @@ var has = function () {
      * Check a host has the correct users
      * @namespace
      */
-    hasObject.user = function () {
-        if (this.user.parent === undefined) {
-            this.user.parent = this;
-        }
-    };
-
+    hasObject.user = {};
 
     /**
      * Check the host has a user added/avaialble
@@ -874,7 +863,10 @@ var has = function () {
      */
     hasObject.user = function (user) {
         this.username = user;
-        return this.parent.base.user.check_exists.call(this.parent, user);
+        if (this.user.parent === undefined) {
+            this.user.parent = this;
+        }
+        return this.base.user.check_exists.call(this, user);
     };
 
     /**

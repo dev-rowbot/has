@@ -13,27 +13,41 @@ settings.protocol = 'http';
 has.environment(settings, 'DEBUG');
 
 has.file('c:\\test').then(function (result) {
-    console.log("========================");
     console.log(result);
+    console.log("========================");
     return has.file.with_version('c:\\ProgramData\\chocolatey\\choco.exe', '0.9.9.12');
 })
 .then(function (result) {
-    console.log("========================");
     console.log(result);
+    console.log("========================");
 });
 
 has.service.installed('filebeat').then(function (result) {
-    console.log("========================");
     console.log(result);
+    console.log("========================");
     return has.service.running('filebeat');
 })
 .then(function (result) {
-    console.log("========================");
     console.log(result);
+    console.log("========================");
     return has.service.with_start_mode('filebeat', 'auto');
 })
 .then(function (result) {
+    console.log(result);
     console.log("========================");
+    return has.software_package("Microsoft Visual Studio Code", "1.3.1");
+})
+.then(function (result) {
+    console.log(result);
+    console.log("========================");
+    return has.port.listening("80");
+})
+.then(function (result) {
+    console.log(result);
+    console.log("========================");
+})
+.catch(function (result) {
     console.log(result);
 });
+
 
