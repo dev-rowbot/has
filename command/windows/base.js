@@ -83,17 +83,19 @@ base = function () {
     };
 
     baseObject.feature = require('./base/feature.js');
+    baseObject.file = require('./base/file.js');
     baseObject.group = require('./base/group.js');
-    baseObject.port = require('./base/port.js');
-    baseObject.user = require('./base/user.js');
+    baseObject.host = require('./base/host.js');
+    baseObject.hot_fix = require('./base/hot_fix.js');
     baseObject.iis_app_pool = require('./base/iis_app_pool.js');
     baseObject.iis_website = require('./base/iis_website.js');
-    baseObject.soft_package = require('./base/soft_package.js');
-    baseObject.file = require('./base/file.js');
-    baseObject.hot_fix = require('./base/hot_fix.js');
+    baseObject.port = require('./base/port.js');
     baseObject.process = require('./base/process.js');
+    baseObject.registry_key = require('./base/registry_key.js');
     baseObject.scheduled_task = require('./base/scheduled_task.js');
     baseObject.service = require('./base/service.js');
+    baseObject.soft_package = require('./base/soft_package.js');
+    baseObject.user = require('./base/user.js');
 
     baseObject.setParams = function (host, username, password, protocol) {
         this.winrmParams.host = host;
