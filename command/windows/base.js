@@ -35,8 +35,8 @@ base = function () {
 
         // Verbose Debug
         //log.debug(JSON.stringify(run_params) + '\n');
-        log.debug('HOST ==>' + this.winrmParams.host + ' ==> CMD: ' + cmd);
-        log.debug('SCRIPT: ' + script);
+        log.debug('[HAS][BASE] HOST ==> ' + this.winrmParams.host + ' ==> CMD ==> ' + cmd);
+        log.debug('[HAS][BASE] USING => ' + (script === undefined ? '<cmd>' : script));
 
         var result = false;
 
@@ -61,10 +61,10 @@ base = function () {
         }).then(function (res) {
             return winrm.close_shell(run_params);
         }).catch(function (err) {
-            log.error(err);
+            log.error('[HAS][BASE] caught an error ==> ' + err);
             dfd.reject(err);
         }).fin(function () {
-            log.info('[CMD] ' + cmd + '\n[RES] ' + result);
+            log.info('[HAS][BASE][CMD] ' + cmd + '\n[HAS][BASE][RES] ' + result);
             dfd.resolve(result);
         });
 

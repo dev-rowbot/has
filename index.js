@@ -237,6 +237,13 @@ var has = function () {
             parent.base.file.check_is_accessible_by_user(parent, file, user, access).then(function (result) {
                 dfd.resolve(result);
             });
+        }, function (reason) {
+            log.error('[HAS][INDEX] File exists exception [' + reason + ']');
+            dfd.reject(reason);
+        })
+        .catch(function (result) {
+            console.log('[HAS][INDEX] Caught ' + result);
+            dfd.reject(result);
         });
         return dfd.promise;
     };
@@ -262,6 +269,13 @@ var has = function () {
             parent.base.file.check_contains.call(parent, file, pattern).then(function (result) {
                 dfd.resolve(result);
             });
+        }, function (reason) {
+            log.error('[HAS][INDEX] File exists exception [' + reason + ']');
+            dfd.reject(reason);
+        })
+        .catch(function (result) {
+            console.log('[HAS][INDEX] Caught ' + result);
+            dfd.reject(result);
         });
         return dfd.promise;
     };
@@ -289,6 +303,13 @@ var has = function () {
             parent.base.file.check_contains_within.call(parent, file, pattern, from, to).then(function (result) {
                 dfd.resolve(result);
             });
+        }, function (reason) {
+            log.error('[HAS][INDEX] File exists exception [' + reason + ']');
+            dfd.reject(reason);
+        })
+        .catch(function (result) {
+            console.log('[HAS][INDEX] Caught ' + result);
+            dfd.reject(result);
         });
         return dfd.promise;
     };
@@ -313,10 +334,22 @@ var has = function () {
             // now execute the function passed in
             parent.base.file.check_has_version.call(parent, file, version).then(function (result) {
                 dfd.resolve(result);
+            }, function (reason) {
+                log.error('[HAS][INDEX] File Version exception [' + reason + ']');
+                dfd.reject(reason);
             })
-                .catch(function (result) { console.log(result); });
+            .catch(function (result) {
+                log.error ('[HAS][INDEX] Caught ' + result);
+                dfd.reject(result);
+            });
+        }, function (reason) {
+            log.error('[HAS][INDEX] File exists exception [' + reason + ']');
+            dfd.reject(reason);
         })
-            .catch(function (result) { console.log(result); });
+        .catch(function (result) {
+            console.log('[HAS][INDEX] Caught ' + result);
+            dfd.reject(result);
+        });
         return dfd.promise;
     };
 
