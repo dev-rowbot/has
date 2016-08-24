@@ -11,7 +11,7 @@ hostList.forEach(function (hostname) {
     /* ---------------------------------------------------- */
     /* Setup 'has' for each host                            */
     /* ---------------------------------------------------- */
-    var has = require('has');
+    var has = require('has')();
     var hostSettings = has.environment.default();
 
     hostSettings.os = 'windows';
@@ -38,6 +38,9 @@ hostList.forEach(function (hostname) {
                     has.file(settings.chocolatey_install_path + '/choco.exe').then(function (result) {
                         expect(result).toBe(true);
                         done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
+                        done();
                     });
                 }, DEFAULT_TIMEOUT);
             });
@@ -45,6 +48,9 @@ hostList.forEach(function (hostname) {
                 it("should be true", function (done) {
                     has.file.with_version(settings.chocolatey_install_path + '/choco.exe', '0.9.9.11').then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);
@@ -56,6 +62,9 @@ hostList.forEach(function (hostname) {
                     // The version is optional
                     has.software_package("Microsoft Visual Studio Code", "1.3.1").then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);
@@ -71,6 +80,9 @@ hostList.forEach(function (hostname) {
                     has.file.which_is_a_directory('C:\\ProgramData\\chocolatey\\lib\\filebeat\\tools\\filebeat-1.2.3-windows').then(function (result) {
                         expect(result).toBe(true);
                         done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
+                        done();
                     });
                 }, DEFAULT_TIMEOUT);
         });
@@ -78,6 +90,9 @@ hostList.forEach(function (hostname) {
                 it("should be true", function (done) {
                     has.service.installed('filebeat').then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);
@@ -87,6 +102,9 @@ hostList.forEach(function (hostname) {
                     has.service.running('filebeat').then(function (result) {
                         expect(result).toBe(false);
                         done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
+                        done();
                     });
                 }, DEFAULT_TIMEOUT);
         });
@@ -94,6 +112,9 @@ hostList.forEach(function (hostname) {
                 it("should be true", function (done) {
                     has.service.with_start_mode('filebeat', 'Auto').then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);

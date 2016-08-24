@@ -91,8 +91,13 @@ hostList.forEach(function (hostname) {
         describe(`${hostname} Ensure Chocolatey is installed`, function () {
             describe(`Chocolatey exe exists`, function () {
                 it("should be true", function (done) {
+                    // Remember to handle the promise rejection scenario or tests will timeout
+                    // instead of giving proper feedback
                     has.file(settings.chocolatey_install_path + '/choco.exe').then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);
@@ -101,6 +106,9 @@ hostList.forEach(function (hostname) {
                 it("should be true", function (done) {
                     has.file.with_version(settings.chocolatey_install_path + '/choco.exe', '0.9.9.11').then(function (result) {
                         expect(result).toBe(true);
+                        done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
                         done();
                     });
                 }, DEFAULT_TIMEOUT);
@@ -113,52 +121,18 @@ hostList.forEach(function (hostname) {
                     has.software_package("Microsoft Visual Studio Code", "1.3.1").then(function (result) {
                         expect(result).toBe(true);
                         done();
+                    }, function(result) {
+                        expect(result.message).toBe(true);
+                        done();
                     });
                 }, DEFAULT_TIMEOUT);
             });
         });
     });
-    describe ("Playbook ensure-filebeat", function () {
-        // Requires some knowledge of what happened during the ansible "deploy"
-        // Filebeat is not a regular installation so we just look for the exe first
-        // and then check if Windows knows about the service
-        describe (`${hostname} Ensure Filebeat is installed`, function () {
-                it("should be true", function (done) {
-                    has.file.which_is_a_directory('C:\\ProgramData\\chocolatey\\lib\\filebeat\\tools\\filebeat-1.2.3-windows').then(function (result) {
-                        expect(result).toBe(true);
-                        done();
-                    });
-                }, DEFAULT_TIMEOUT);
-        });
-        describe (`${hostname} Ensure Filebeat Service is installed`, function () {
-                it("should be true", function (done) {
-                    has.service.installed('filebeat').then(function (result) {
-                        expect(result).toBe(true);
-                        done();
-                    });
-                }, DEFAULT_TIMEOUT);
-        });
-        describe (`${hostname} Ensure filebeat service is Stopped`, function () {
-                it("should be true", function (done) {
-                    has.service.running('filebeat').then(function (result) {
-                        expect(result).toBe(false);
-                        done();
-                    });
-                }, DEFAULT_TIMEOUT);
-        });
-        describe (`${hostname} Ensure filebeat service start mode is auto`, function () {
-                it("should be true", function (done) {
-                    has.service.with_start_mode('filebeat', 'Auto').then(function (result) {
-                        expect(result).toBe(true);
-                        done();
-                    });
-                }, DEFAULT_TIMEOUT);
-        });
-    });
 });
 
 ```
-
+Have a look at the test directory for a more complete example.
 
 ----
 ## Credit
