@@ -139,6 +139,13 @@ var has = function () {
             func.call(parent, file).then(function (result) {
                 dfd.resolve(result);
             });
+        }, function (reason) {
+            log.error('[HAS][INDEX] File exists exception [' + reason + ']');
+            dfd.reject(reason);
+        })
+        .catch(function (result) {
+            console.log('[HAS][INDEX] Caught ' + result);
+            dfd.reject(result);
         });
         return dfd.promise;
     };
